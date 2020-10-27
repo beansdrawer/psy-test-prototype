@@ -1,25 +1,54 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import Main from './components/Main'
+import Result from './components/Result'
+import Question from './components/Question'
+import './App.scss';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const NUM_OF_QUESTION = 12
+
+class App extends React.Component{
+
+  constructor(props){
+    super(props)
+    this.state = {
+      curPos : 0,
+      userName : ""
+    }
+  }
+
+  handleBegin = (e) => {
+    e.preventDefault();
+    this.setState({
+      curPos: 1,
+      userName : e.target.name.value
+    })
+  }
+
+  nextStep = () => {
+    this.setState({
+      curPos: this.state.curPos + 1,
+    })
+  }
+
+  resetTest = () => {
+    this.setState({
+      curPos: 0,
+    })
+  }
+
+
+  render(){
+    const { curPos } = this.state;
+    return (<div className="app">
+      {
+        curPos === 0 ? 
+        <Main handleBegin={this.handleBegin}/> : 
+        curPos > NUM_OF_QUESTION ? 
+        <Result resetTest={this.resetTest}/> :
+        <Question nextStep={this.nextStep} curPos={this.state.curPos} />
+      }
+    </div>)
+  }
 }
 
 export default App;
